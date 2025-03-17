@@ -1,5 +1,9 @@
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || process.env.REACT_APP_API_BASE_URL || "";
+
+// Utility function to throw an error if response is not OK
 async function throwIfResNotOk(res: Response) {
   if (!res.ok) {
     const text = (await res.text()) || res.statusText;
@@ -7,25 +11,23 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
+// API request function
 export async function apiRequest(
   method: string,
-  url: string,
-  data?: unknown | undefined,
+  endpoint: string,
+  data?: unknown,
+  additionalHeaders?: Record<string, string> // Optional additional headers
 ): Promise<Response> {
-  // Get authentication token from local storage
+  const url = `${API_BASE_URL}${endpoint}`;
   const token = localStorage.getItem("auth_token");
-  const headers: Record<string, string> = {};
-  
-  // Add Content-Type header if there's data
-  if (data) {
-    headers["Content-Type"] = "application/json";
-  }
-  
-  // Add Authorization header if there's a token
-  if (token && url !== "/api/auth/login") {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-  
+
+  // Default headers
+  const headers: Record<string, string> = {
+    ...(data && { "Content-Type": "application/json" }), // Add Content-Type if data is present
+    ...(token && { Authorization: `Bearer ${token}` }), // Add Authorization header if token exists
+    ...additionalHeaders, // Merge additional headers if provided
+  };
+
   const res = await fetch(url, {
     method,
     headers,
@@ -38,21 +40,22 @@ export async function apiRequest(
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
+
 export const getQueryFn: <T>(options: {
   on401: UnauthorizedBehavior;
 }) => QueryFunction<T> =
   ({ on401: unauthorizedBehavior }) =>
   async ({ queryKey }) => {
-    // Get authentication token from local storage
+    const endpoint = queryKey[0] as string;
+    const url = `${API_BASE_URL}${endpoint}`;
     const token = localStorage.getItem("auth_token");
+
     const headers: Record<string, string> = {};
-    
-    // Add Authorization header if there's a token
     if (token) {
       headers["Authorization"] = `Bearer ${token}`;
     }
-    
-    const res = await fetch(queryKey[0] as string, {
+
+    const res = await fetch(url, {
       headers,
       credentials: "include",
     });
@@ -65,6 +68,7 @@ export const getQueryFn: <T>(options: {
     return await res.json();
   };
 
+// React Query Client
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

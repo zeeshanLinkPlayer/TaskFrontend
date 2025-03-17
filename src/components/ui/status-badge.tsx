@@ -1,9 +1,13 @@
-import { cn } from "@/lib/utils";
-import { TaskStatus } from "@shared/schema";
+import { cn } from "../../lib/utils";
 
 interface StatusBadgeProps {
   status: string;
   className?: string;
+}
+const TaskStatus={
+  PENDING:"pending",
+  IN_PROGRESS:"in_progress",
+  COMPLETED:"completed"
 }
 
 const StatusBadge = ({ status, className }: StatusBadgeProps) => {

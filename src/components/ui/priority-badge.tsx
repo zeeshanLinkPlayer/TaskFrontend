@@ -1,9 +1,14 @@
-import { cn } from "@/lib/utils";
-import { TaskPriority } from "@shared/schema";
+import { cn } from "../../lib/utils";
 
 interface PriorityBadgeProps {
   priority: string;
   className?: string;
+}
+const TaskPriority={
+  LOW:"Low",
+  HIGH:"High",
+  MEDIUM:"Medium",
+  URGENT:"Urgent"
 }
 
 const PriorityBadge = ({ priority, className }: PriorityBadgeProps) => {

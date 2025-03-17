@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest } from "@/lib/queryClient";
-import { queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import AvatarInitials from "@/components/ui/avatar-initials";
-import { Button } from "@/components/ui/button";
+import { apiRequest } from "../../lib/queryClient";
+import { queryClient } from "../../lib/queryClient";
+import { useToast } from "../../hooks/use-toast";
+import AvatarInitials from "../ui/avatar-initials";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from "@/components/ui/dialog";
+} from "../ui/dialog";
 import { UserForm } from "./user-form";
 
 interface User {
