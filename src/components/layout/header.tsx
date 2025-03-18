@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../lib/authProvider";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";

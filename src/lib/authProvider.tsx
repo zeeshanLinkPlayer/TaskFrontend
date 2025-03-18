@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import  { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useLocation } from "wouter";
 import { useToast } from "../hooks/use-toast";

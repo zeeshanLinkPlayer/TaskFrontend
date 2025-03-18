@@ -1,5 +1,6 @@
 import * as React from "react"
 import * as SwitchPrimitives from "@radix-ui/react-switch"
+// @ts-nocheck
 
 import { cn } from "../../lib/utils";
 

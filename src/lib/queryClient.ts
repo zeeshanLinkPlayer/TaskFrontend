@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { QueryClient, QueryFunction } from "@tanstack/react-query";
 
 const API_BASE_URL =

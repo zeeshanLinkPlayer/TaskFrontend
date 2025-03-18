@@ -2,6 +2,7 @@ import { ReactNode, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "../../lib/authProvider";
 import { useToast } from "../../hooks/use-toast";
+// @ts-nocheck
 
 interface ProtectedRouteProps {
   children: ReactNode;

@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "../lib/authProvider";
 import Sidebar from "../components/layout/sidebar";

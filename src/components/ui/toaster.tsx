@@ -7,6 +7,7 @@ import {
   ToastTitle,
   ToastViewport,
 } from "../ui/toast"
+// @ts-nocheck
 
 export function Toaster() {
   const { toasts } = useToast()

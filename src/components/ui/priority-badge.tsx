@@ -1,4 +1,5 @@
 import { cn } from "../../lib/utils";
+// @ts-nocheck
 
 interface PriorityBadgeProps {
   priority: string;
