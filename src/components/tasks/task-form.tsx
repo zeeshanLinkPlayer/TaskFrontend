@@ -50,7 +50,6 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
   // ✅ Ensure user role is properly checked
   const isAdmin = user?.role === "admin" || user?.user?.role === "admin";
   const isManager = user?.role === "manager" || user?.user?.role === "manager";
-  const isUser = user?.role === "user" || user?.user?.role === "user";
 
   // ✅ Use React Hook Form with validation
   const taskFormSchema = z.object({
@@ -81,7 +80,7 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
   });
 
   // ✅ Fetch users for assignment dropdown
-  const { data: users = [], error } = useQuery({
+  const { data: users = [] } = useQuery({
     queryKey: isAdmin ? ["/api/users"] : ["/api/users/managed"],
     queryFn: async () => {
       console.log("Fetching users...");

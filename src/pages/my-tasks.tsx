@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "../lib/authProvider";
 import Sidebar from "../components/layout/sidebar";
 import Header from "../components/layout/header";
 import TaskList from "../components/tasks/task-list";
@@ -14,7 +13,6 @@ import { TaskForm } from "../components/tasks/task-form";
 import { queryClient } from "../lib/queryClient";
 
 export default function MyTasks() {
-  const { user } = useAuth();
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
 
   return (

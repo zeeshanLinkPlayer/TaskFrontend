@@ -14,7 +14,6 @@ const Sidebar = () => {
   // Check if the user is an admin
   const role=user?.user?.role||user?.role 
   const isAdmin = role === "admin"; 
-  const isManager = role === "manager"; 
   console.log(isAdmin,"isAdmin")
   // Debugging: Log the role
   console.log({ isAdmin });

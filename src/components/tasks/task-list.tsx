@@ -15,7 +15,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from "../ui/dialog";
-import { useAuth } from "../../lib/authProvider";
 import { TaskForm } from "./task-form";
 import { format } from "date-fns";
 
@@ -49,7 +48,6 @@ const TaskStatus = {
 
 const TaskList = () => {
   const { toast } = useToast();
-  const { user } = useAuth();
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [priorityFilter, setPriorityFilter] = useState<string>("all");
   const [sortOrder, setSortOrder] = useState<string>("newest");
@@ -138,17 +136,17 @@ const TaskList = () => {
   });
 
   // Stats for the cards
-  const taskStats = {
-    pending: tasks
-      ? tasks.filter((task) => task.status === TaskStatus.PENDING).length
-      : 0,
-    inProgress: tasks
-      ? tasks.filter((task) => task.status === TaskStatus.IN_PROGRESS).length
-      : 0,
-    completed: tasks
-      ? tasks.filter((task) => task.status === TaskStatus.COMPLETED).length
-      : 0,
-  };
+  // const taskStats = {
+  //   pending: tasks
+  //     ? tasks.filter((task) => task.status === TaskStatus.PENDING).length
+  //     : 0,
+  //   inProgress: tasks
+  //     ? tasks.filter((task) => task.status === TaskStatus.IN_PROGRESS).length
+  //     : 0,
+  //   completed: tasks
+  //     ? tasks.filter((task) => task.status === TaskStatus.COMPLETED).length
+  //     : 0,
+  // };
 
   // Handle task deletion
   const handleDeleteTask = (task: Task) => {
