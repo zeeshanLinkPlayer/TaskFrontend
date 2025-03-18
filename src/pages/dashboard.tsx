@@ -16,52 +16,52 @@ import {
 import { TaskForm } from "../components/tasks/task-form";
 import { queryClient } from "../lib/queryClient";
 import { API_BASE_URL } from "../config/config";
+
 export default function Dashboard() {
   const { user } = useAuth();
   const isAdmin = user?.role === "admin";
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
+
   const TaskStatus = {
     PENDING: "pending",
     IN_PROGRESS: "in_progress",
     COMPLETED: "completed",
   };
+
   const fetchTasks = async () => {
     const token = localStorage.getItem("auth_token");
-  
+
     const res = await fetch(`${API_BASE_URL}/api/tasks`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
     });
-  
+
     if (!res.ok) {
       if (res.status === 403) throw new Error("Unauthorized: Access Denied");
       throw new Error("Failed to fetch tasks");
     }
-  
-    return res.json();
+
+    const data = await res.json();
+    console.log("Fetched tasks:", data); // Debugging: Check if completed tasks exist
+    return data;
   };
-  
-  // Use `fetchTasks` inside `useQuery`
+
+  // Fetch tasks using React Query
   const { data: tasks, isLoading, error } = useQuery({
-    queryKey: ["/api/tasks"], // Cache key
-    queryFn: fetchTasks, // Function to fetch tasks
+    queryKey: ["/api/tasks"],
+    queryFn: fetchTasks,
   });
 
   // Stats calculation
   const taskStats = {
-    pending: Array.isArray(tasks)
-      ? tasks.filter((task: any) => task.status === TaskStatus.PENDING).length
-      : 0,
-    inProgress: Array.isArray(tasks)
-      ? tasks.filter((task: any) => task.status === TaskStatus.IN_PROGRESS)
-          .length
-      : 0,
-    completed: Array.isArray(tasks)
-      ? tasks.filter((task: any) => task.status === TaskStatus.COMPLETED).length
-      : 0,
+    pending: tasks?.filter((task: any) => task.status.toLowerCase() === TaskStatus.PENDING).length || 0,
+    inProgress: tasks?.filter((task: any) => task.status.toLowerCase() === TaskStatus.IN_PROGRESS).length || 0,
+    completed: tasks?.filter((task: any) => task.status.toLowerCase() === TaskStatus.COMPLETED).length || 0,
   };
+
+  console.log("Pending:", taskStats.pending, "In Progress:", taskStats.inProgress, "Completed:", taskStats.completed);
 
   return (
     <div className="flex h-screen w-full bg-slate-50">

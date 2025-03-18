@@ -50,8 +50,20 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
   // ✅ Ensure user role is properly checked
   const isAdmin = user?.role === "admin" || user?.user?.role === "admin";
   const isManager = user?.role === "manager" || user?.user?.role === "manager";
+  const isUser = user?.role === "user" || user?.user?.role === "user";
 
   // ✅ Use React Hook Form with validation
+  const taskFormSchema = z.object({
+    title: z.string().min(3, "Title must be at least 3 characters"),
+    description: z.string().min(5, "Description must be at least 5 characters"),
+    status: z.enum(["pending", "in-progress", "completed"]),
+    priority: z.enum(["Low", "Medium", "High", "Urgent"]),
+    dueDate: z.string(),
+    assigneeId: isAdmin || isManager 
+      ? z.string().min(1, "Assignee is required") // Required for Admins & Managers
+      : z.string().optional().nullable(), // Not required for Users
+  });
+  
   const form = useForm<TaskFormValues>({
     resolver: zodResolver(taskFormSchema),
     defaultValues: {
@@ -62,7 +74,9 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
       dueDate: task?.dueDate
         ? format(new Date(task.dueDate), "yyyy-MM-dd")
         : format(new Date(), "yyyy-MM-dd"),
-      assigneeId: task?.assigneeId || "", // Default to empty string if no assignee is provided
+      assigneeId: isAdmin || isManager 
+        ? task?.assigneeId || "" // Admins & Managers must select an assignee
+        : user?.id || "", // Users auto-assign themselves
     },
   });
 
@@ -71,22 +85,20 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
     queryKey: isAdmin ? ["/api/users"] : ["/api/users/managed"],
     queryFn: async () => {
       console.log("Fetching users...");
-
+  
       const res = await apiRequest(
         "GET",
         isAdmin ? "/api/users" : "/api/users/managed"
       );
-
-      // Check if apiRequest already returns JSON
+  
       const data = typeof res.json === "function" ? await res.json() : res;
-
-      console.log("API Response Data:", data);
-
+  
+      console.log("Fetched Users:", data); // Debugging
+  
       return data ?? [];
     },
     enabled: Boolean(isAdmin || isManager),
   });
-
   // ✅ Handle task creation/updating
   const taskMutation = useMutation({
     mutationFn: async (values: TaskFormValues) => {
@@ -264,8 +276,8 @@ export function TaskForm({ task, onSuccess, onCancel }: TaskFormProps) {
                       console.log("Selected Assignee ID:", value); // Debugging
                       field.onChange(value); // Pass the string value directly
                     }}
-                    defaultValue={field.value} // No need to convert to string
-                  >
+                    defaultValue={field.value ?? undefined}
+                    >
                     <FormControl>
                       <SelectTrigger className="bg-white text-black border border-gray-300">
                         <SelectValue placeholder="Select assignee" />
