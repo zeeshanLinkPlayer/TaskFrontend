@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import  { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useLocation } from "wouter";
-import { apiRequest } from "./queryClient";
 import { useToast } from "../hooks/use-toast";
 
 export interface User {

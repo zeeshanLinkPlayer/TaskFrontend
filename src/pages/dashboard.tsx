@@ -49,7 +49,7 @@ export default function Dashboard() {
   };
 
   // Fetch tasks using React Query
-  const { data: tasks, isLoading, error } = useQuery({
+  const { data: tasks } = useQuery({
     queryKey: ["/api/tasks"],
     queryFn: fetchTasks,
   });

@@ -1,4 +1,4 @@
-import { Switch, Route, useLocation } from "wouter";
+import { Switch, Route,  } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./lib/authProvider";
@@ -7,7 +7,6 @@ import NotFound from "./pages/not-found";
 import Login from "./pages/login";
 import Dashboard from "./pages/dashboard";
 import MyTasks from "./pages/my-tasks";
-import TeamManagement from "./pages/team-management";
 import UserManagement from "./pages/user-management";
 import ProtectedRoute from "./components/layout/protected-route";
 import "./index.css";
